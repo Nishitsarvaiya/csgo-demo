@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Environment, OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { useRef } from "react";
-import Agent1 from "../World/Agent1";
-import Map from "../World/Map";
-import { DirectionalLight, HemisphereLight } from "three";
-import Agent2 from "../World/Agent2";
+import { Environment, PerspectiveCamera, Sky } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { Physics } from '@react-three/rapier';
+import { Suspense, useRef } from 'react';
+import { DirectionalLight, HemisphereLight } from 'three';
+import Character from '../World/Character';
+import Pine from '../World/Pine';
 
 export default function Scene() {
 	const cameraRef = useRef(null);
-	const hemiLight = new HemisphereLight(0xffffff, 0xfffffff, 0.6);
+	const hemiLight = new HemisphereLight(0xffffff, 0xfffffff, 1.0);
 	hemiLight.color.setHSL(0.6, 1, 0.6);
 	hemiLight.groundColor.setHSL(0.095, 1, 0.75);
 
@@ -29,16 +29,20 @@ export default function Scene() {
 	light.shadow.camera.bottom = -100;
 
 	return (
-		<Canvas shadows>
-			<Environment preset="sunset" background backgroundBlurriness={0.2} />
+		<Canvas shadows gl={{ antialias: true }}>
+			<Sky />
+			<Environment preset='sunset' />
 			<hemisphereLight {...hemiLight} />/
 			<directionalLight {...light} />
 			<ambientLight intensity={0.1} />
 			<PerspectiveCamera makeDefault position={[0, 1, -3]} ref={cameraRef} />
-			<OrbitControls camera={cameraRef.current} />
-			<Map />
-			{/* <Agent1 camera={cameraRef.current} /> */}
-			<Agent2 camera={cameraRef.current} />
+			{/* <OrbitControls camera={cameraRef.current} /> */}
+			<Suspense>
+				<Physics gravity={[0, 1, 0]} debug>
+					<Pine />
+					<Character camera={cameraRef.current} />
+				</Physics>
+			</Suspense>
 		</Canvas>
 	);
 }
