@@ -1,6 +1,6 @@
 "use client";
 
-import { Environment, OrbitControls, PerspectiveCamera, Sky } from "@react-three/drei";
+import { Environment, Loader, OrbitControls, PerspectiveCamera, Sky } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useEffect, useRef } from "react";
@@ -33,38 +33,48 @@ export default function Home() {
 	light.shadow.camera.bottom = -100;
 
 	return (
-		<Canvas
-			shadows
-			gl={{ antialias: true }}
-			camera={{ position: [0, 2, 4], far: 1000, near: 0.01, fov: 50 }}
-			dpr={[1, 2]}>
-			<Sky />
-			<Environment preset="city" />
-			<hemisphereLight {...hemiLight} />
-			<directionalLight {...light} />
-			<ambientLight intensity={0.1} />
-			{/* <PerspectiveCamera makeDefault position={[0, 2, 5]} ref={cameraRef} /> */}
-			<OrbitControls target={[0, 1, 0]} makeDefault enablePan={false} enableZoom={false} enableRotate={false} />
-			<Suspense>
-				<Ground />
-				<EffectComposer multisampling={8} autoClear={false}>
-					<Vignette offset={0.5} darkness={0.5} eskil={false} blendFunction={BlendFunction.NORMAL} />
-				</EffectComposer>
-				<Character
-					url="/models/Soldier/soldier.gltf"
-					scale={0.012}
-					position={[-1, 0, 0]}
-					name="Soldier"
-					rotation={[0, 0, 0]}
+		<main className="h-full relative">
+			<Canvas
+				shadows
+				gl={{ antialias: true }}
+				camera={{ position: [0, 2, 4], far: 1000, near: 0.01, fov: 50 }}
+				dpr={[1, 2]}>
+				<Sky />
+				<Environment preset="city" />
+				<hemisphereLight {...hemiLight} />
+				<directionalLight {...light} />
+				<ambientLight intensity={0.1} />
+				{/* <PerspectiveCamera makeDefault position={[0, 2, 5]} ref={cameraRef} /> */}
+				<OrbitControls
+					target={[0, 1, 0]}
+					makeDefault
+					enablePan={false}
+					enableZoom={false}
+					enableRotate={false}
 				/>
-				<Character
-					url="/models/Eve/eve.gltf"
-					scale={1.5}
-					position={[1, 0, 0]}
-					name="Eve"
-					rotation={[0, 0, 0]}
-				/>
-			</Suspense>
-		</Canvas>
+				<Suspense>
+					<Ground />
+					<EffectComposer multisampling={8} autoClear={false}>
+						<Vignette offset={0.5} darkness={0.5} eskil={false} blendFunction={BlendFunction.NORMAL} />
+					</EffectComposer>
+					<Character
+						url="/models/Soldier/soldier.gltf"
+						scale={0.012}
+						position={[-1, 0, 0]}
+						name="Soldier"
+						rotation={[0, 0, 0]}
+					/>
+					<Character
+						url="/models/Eve/eve.gltf"
+						scale={1.5}
+						position={[1, 0, 0]}
+						name="Eve"
+						rotation={[0, 0, 0]}
+					/>
+				</Suspense>
+			</Canvas>
+			<Loader dataInterpolation={(p) => `Loading ${p.toFixed(2)}%`} initialState={(active) => active} />
+			<h1 className="absolute z-[9999999] top-8 left-1/2 -translate-x-1/2 text-3xl">Select your Player</h1>
+		</main>
 	);
 }

@@ -15,7 +15,7 @@ export default function Player({ url, scale, ...restProps }) {
 
 	scene.scale.setScalar(scale);
 	scene.traverse((obj) => {
-		if (obj.type === "Mesh") {
+		if (obj.type === "SkinnedMesh") {
 			obj.castShadow = true;
 			obj.receiveShadow = true;
 		}

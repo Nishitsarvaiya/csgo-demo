@@ -1,6 +1,6 @@
 "use client";
 
-import { Environment, OrbitControls, PerspectiveCamera, Sky } from "@react-three/drei";
+import { Environment, Loader, OrbitControls, PerspectiveCamera, Sky } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useRef } from "react";
@@ -43,20 +43,27 @@ export default function Scene() {
 	light.shadow.camera.bottom = -100;
 
 	return (
-		<Canvas shadows gl={{ antialias: true, powerPreference: "high-performance" }} dpr={[1, 2]}>
-			<Sky />
-			<Environment preset="sunset" />
-			<hemisphereLight {...hemiLight} />/
-			<directionalLight {...light} />
-			<ambientLight intensity={0.1} />
-			<PerspectiveCamera makeDefault position={[0, 8, 10]} />
-			<OrbitControls />
-			<Suspense>
-				{/* <Physics gravity={[0, 1, 0]} debug> */}
-				<Map />
-				<Player url={character.url} scale={character.scale} />
-				{/* </Physics> */}
-			</Suspense>
-		</Canvas>
+		<main className="h-full relative">
+			<Canvas shadows gl={{ antialias: true, powerPreference: "high-performance" }} dpr={[1, 2]}>
+				<Sky />
+				<Environment preset="sunset" />
+				<hemisphereLight {...hemiLight} />/
+				<directionalLight {...light} />
+				<ambientLight intensity={0.1} />
+				<PerspectiveCamera makeDefault position={[0, 8, 10]} />
+				<OrbitControls />
+				<Suspense>
+					{/* <Physics gravity={[0, 1, 0]} debug> */}
+					<Map />
+					<Player url={character.url} scale={character.scale} />
+					{/* </Physics> */}
+				</Suspense>
+			</Canvas>
+			<Loader dataInterpolation={(p) => `Loading ${p.toFixed(2)}%`} initialState={(active) => active} />
+			<div className="absolute z-[9999999] bottom-8 right-8 flex items-center justify-end gap-4">
+				<div className="bg-white px-4 py-2 rounded-sm text-xs">Move - [ W ] [ A ] [ S ] [ D ]</div>
+				<div className="bg-white px-4 py-2 rounded-sm text-xs">Run - [ Shift ]</div>
+			</div>
+		</main>
 	);
 }
