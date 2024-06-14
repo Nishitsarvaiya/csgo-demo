@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Environment, PerspectiveCamera, Sky } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { Physics } from '@react-three/rapier';
-import { Suspense, useRef } from 'react';
-import { DirectionalLight, HemisphereLight } from 'three';
-import Character from '../World/Character';
-import Pine from '../World/Pine';
+import { Environment, OrbitControls, PerspectiveCamera, Sky } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Physics } from "@react-three/rapier";
+import { Suspense, useRef } from "react";
+import { DirectionalLight, HemisphereLight } from "three";
+import Player from "../World/Player";
+import Map from "../World/Map";
 
 export default function Scene() {
 	const cameraRef = useRef(null);
@@ -31,17 +31,17 @@ export default function Scene() {
 	return (
 		<Canvas shadows gl={{ antialias: true }}>
 			<Sky />
-			<Environment preset='sunset' />
+			<Environment preset="sunset" />
 			<hemisphereLight {...hemiLight} />/
 			<directionalLight {...light} />
 			<ambientLight intensity={0.1} />
-			<PerspectiveCamera makeDefault position={[0, 1, -3]} ref={cameraRef} />
-			{/* <OrbitControls camera={cameraRef.current} /> */}
+			<PerspectiveCamera makeDefault position={[0, 8, 10]} ref={cameraRef} />
+			<OrbitControls camera={cameraRef.current} />
 			<Suspense>
-				<Physics gravity={[0, 1, 0]} debug>
-					<Pine />
-					<Character camera={cameraRef.current} />
-				</Physics>
+				{/* <Physics gravity={[0, 1, 0]} debug> */}
+				<Map />
+				<Player url="/models/Eve/eve.gltf" scale="1.2" />
+				{/* </Physics> */}
 			</Suspense>
 		</Canvas>
 	);
