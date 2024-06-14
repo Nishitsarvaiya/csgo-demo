@@ -9,6 +9,7 @@ import { useGLTF } from "@react-three/drei";
 export default function Map(props) {
 	const { scene, nodes, materials } = useGLTF("/models/Map/map.gltf");
 	scene.traverse((obj) => {
+		console.log(obj);
 		if (obj.type === "Mesh") {
 			obj.castShadow = true;
 			obj.receiveShadow = true;

@@ -7,9 +7,23 @@ import { Suspense, useRef } from "react";
 import { DirectionalLight, HemisphereLight } from "three";
 import Player from "../World/Player";
 import Map from "../World/Map";
+import { useSearchParams } from "next/navigation";
+
+const CHARACTERS = {
+	Soldier: {
+		url: "/models/Soldier/soldier.gltf",
+		scale: 0.0108,
+	},
+	Eve: {
+		url: "/models/Eve/eve.gltf",
+		scale: 1.2,
+	},
+};
 
 export default function Scene() {
-	const cameraRef = useRef(null);
+	const query = useSearchParams();
+	const character = CHARACTERS[query.get("character")];
+
 	const hemiLight = new HemisphereLight(0xffffff, 0xfffffff, 1.0);
 	hemiLight.color.setHSL(0.6, 1, 0.6);
 	hemiLight.groundColor.setHSL(0.095, 1, 0.75);
@@ -29,18 +43,18 @@ export default function Scene() {
 	light.shadow.camera.bottom = -100;
 
 	return (
-		<Canvas shadows gl={{ antialias: true }}>
+		<Canvas shadows gl={{ antialias: true, powerPreference: "high-performance" }} dpr={[1, 2]}>
 			<Sky />
 			<Environment preset="sunset" />
 			<hemisphereLight {...hemiLight} />/
 			<directionalLight {...light} />
 			<ambientLight intensity={0.1} />
-			<PerspectiveCamera makeDefault position={[0, 8, 10]} ref={cameraRef} />
-			<OrbitControls camera={cameraRef.current} />
+			<PerspectiveCamera makeDefault position={[0, 8, 10]} />
+			<OrbitControls />
 			<Suspense>
 				{/* <Physics gravity={[0, 1, 0]} debug> */}
 				<Map />
-				<Player url="/models/Eve/eve.gltf" scale="1.2" />
+				<Player url={character.url} scale={character.scale} />
 				{/* </Physics> */}
 			</Suspense>
 		</Canvas>

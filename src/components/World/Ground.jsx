@@ -17,7 +17,7 @@ export default function Ground() {
 	nor.repeat = new Vector2(10, 10);
 
 	return (
-		<mesh rotation={[-Math.PI / 2, 0, 0]}>
+		<mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow={true}>
 			<planeGeometry args={[20, 20, 10, 10]} />
 			<meshStandardMaterial map={color} aoMap={arm} roughnessMap={arm} metalnessMap={arm} normalMap={nor} />
 		</mesh>
